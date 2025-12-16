@@ -1,8 +1,8 @@
-# Curb Data Specification: Curbs API
+# Database Specification: Curbs API
 
 This document defines the database specification implemented to support the Curbs API
 as implemented for the City of Boston SMART Grant. This database is designed to be
-extensible and generic, minimizing any dependency on Boston-specific datasets or
+extensible and generic, minimizing dependency on Boston-specific datasets or
 implementation details.
 
 The database is intended to be implemented in PostGIS, which allows for querying
@@ -11,6 +11,8 @@ data using a bounding box or point and radius as required by the CDS API.
 ## Database Tables
 
 ### curb_zones
+
+This table defines the physical properties of each zone. Associated policies are defined in a subsequent table.
 
 | Column Name             | Type                  | Spec Required |
 | ----------------------- | --------------------- | ------------- |
@@ -41,6 +43,8 @@ data using a bounding box or point and radius as required by the CDS API.
 
 ### curb_policies
 
+This table defines each policy and is referenced by the `curb_zones` table.
+
 | Column Name     | Type               | Spec Required |
 | --------------- | ------------------ | ------------- |
 | curb_policy_id  | UUID (PRIMARY KEY) | Y             |
@@ -52,12 +56,16 @@ data using a bounding box or point and radius as required by the CDS API.
 
 ### curb_zone_policies
 
+This join table links curb zones and policies.
+
 | Column Name    | Type | Spec Required |
 | -------------- | ---- | ------------- |
 | curb_zone_id   | UUID | Y             |
 | curb_policy_id | UUID | Y             |
 
 ### curb_policy_rules
+
+This table lists each rule associated with each policy.
 
 | Column Name         | Type               | Spec Required |
 | ------------------- | ------------------ | ------------- |
@@ -74,6 +82,8 @@ data using a bounding box or point and radius as required by the CDS API.
 | purposes            | TEXT[]             | N             |
 
 ### curb_policy_time_spans
+
+This table lists each timespan associated with each policy.
 
 | Column Name              | Type               | Spec Required |
 | ------------------------ | ------------------ | ------------- |

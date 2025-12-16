@@ -7,7 +7,7 @@ has been modified to identify elements of the specification implemented as part
 of this API. Aspects of the Curbs API not implemented at this time have been
 moved into collapsable sections.
 
-**See [the complete specification and other CDS APIs](/README.md#endpoints) on the homepage.**
+**See [the complete specification and other CDS APIs](https://github.com/openmobilityfoundation/curb-data-specification/blob/main/README.md) on the homepage.**
 
 # Endpoints
 
@@ -341,7 +341,6 @@ table below are not included in the current database spec and will require more 
 
 <details>
 <summary> Optional Fields Not Implemented </summary>
-<br>
 
 | Name                      | Type                                                              | Required/Optional | Description                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------------------- | ----------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -571,7 +570,6 @@ Remaining fields will not be filled as part of the Boston SMART grant effort to 
 and have not yet been implemented in the database structure or API.
 
 <details>
-<br>
 <summary> Optional Fields Not Implemented </summary>
 
 | Name                      | Type                                                      | Required/Optional | Description                                                                                                                                                                                                                                                                                                                                                                           |
@@ -583,7 +581,6 @@ and have not yet been implemented in the database structure or API.
 _\* These fields are not included in the database structure as they reference optional aspects of CDS that have not yet been implemented for this API_
 
 </details>
-<br>
 
 [Top][toc]
 
