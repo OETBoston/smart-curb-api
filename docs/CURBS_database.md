@@ -15,8 +15,7 @@ data using a bounding box or point and radius as required by the CDS API.
 This table defines the physical properties of each zone. Associated policies are defined in a subsequent table.
 
 Only a few of the fields will be populated during initial database development under the SMART grant. Fields
-listed as not being populated will be included in the database, but will not yetr include any data.
-This will allow future addition of data to theise fields.
+listed as not being populated will be included in the database, but will not yet include any data.
 
 | Column Name             | Type                  | Spec Required | Populated |
 | ----------------------- | --------------------- | ------------- | --------- |
@@ -48,6 +47,8 @@ This will allow future addition of data to theise fields.
 ### curb_policies
 
 This table defines each policy and is referenced by the `curb_zones` table.
+
+The `policy_color_id` field will be included but not populated, allowing for future expansion.
 
 | Column Name     | Type               | Spec Required | Populated |
 | --------------- | ------------------ | ------------- | --------- |
