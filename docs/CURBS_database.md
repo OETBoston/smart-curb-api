@@ -14,45 +14,45 @@ data using a bounding box or point and radius as required by the CDS API.
 
 This table defines the physical properties of each zone. Associated policies are defined in a subsequent table.
 
-| Column Name             | Type                  | Spec Required |
-| ----------------------- | --------------------- | ------------- |
-| curb_zone_id            | UUID (PRIMARY KEY)    | Y             |
-| geometry                | GEOGRAPHY(LINESTRING) | Y             |
-| published_date          | TIMESTAMP             | Y             |
-| last_updated_date       | TIMESTAMP             | Y             |
-| start_date              | TIMESTAMP             | Y             |
-| end_date                | TIMESTAMP             | N             |
-| name                    | VARCHAR               | N             |
-| description             | TEXT                  | N             |
-| jurisdiction_type       | VARCHAR               | N             |
-| owner_name              | VARCHAR               | N             |
-| user_zone_id            | VARCHAR               | N             |
-| street_name             | VARCHAR               | N             |
-| address_number          | VARCHAR               | N             |
-| cross_street_start_name | VARCHAR               | N             |
-| length                  | INTEGER               | N             |
-| available               | BOOLEAN               | N             |
-| available_space_lengths | INTEGER[]             | N             |
-| availability_time       | TIMESTAMP             | N             |
-| width                   | INTEGER               | N             |
-| parking_angle           | VARCHAR               | N             |
-| num_spaces              | INTEGER               | N             |
-| street_side             | VARCHAR               | N             |
-| median                  | BOOLEAN               | N             |
-| entire_roadway          | BOOLEAN               | N             |
+| Column Name             | Type                  | Spec Required | Populated |
+| ----------------------- | --------------------- | ------------- | --------- |
+| curb_zone_id            | UUID (PRIMARY KEY)    | Y             | Y         |
+| geometry                | GEOGRAPHY(LINESTRING) | Y             | Y         |
+| published_date          | TIMESTAMP             | Y             | Y         |
+| last_updated_date       | TIMESTAMP             | Y             | Y         |
+| start_date              | TIMESTAMP             | Y             | Y         |
+| end_date                | TIMESTAMP             | N             | Y         |
+| name                    | VARCHAR               | N             | N         |
+| description             | TEXT                  | N             | N         |
+| jurisdiction_type       | VARCHAR               | N             | N         |
+| owner_name              | VARCHAR               | N             | N         |
+| user_zone_id            | VARCHAR               | N             | N         |
+| street_name             | VARCHAR               | N             | N         |
+| address_number          | VARCHAR               | N             | N         |
+| cross_street_start_name | VARCHAR               | N             | N         |
+| length                  | INTEGER               | N             | N         |
+| available               | BOOLEAN               | N             | N         |
+| available_space_lengths | INTEGER[]             | N             | N         |
+| availability_time       | TIMESTAMP             | N             | N         |
+| width                   | INTEGER               | N             | N         |
+| parking_angle           | VARCHAR               | N             | N         |
+| num_spaces              | INTEGER               | N             | N         |
+| street_side             | VARCHAR               | N             | N         |
+| median                  | BOOLEAN               | N             | N         |
+| entire_roadway          | BOOLEAN               | N             | N         |
 
 ### curb_policies
 
 This table defines each policy and is referenced by the `curb_zones` table.
 
-| Column Name     | Type               | Spec Required |
-| --------------- | ------------------ | ------------- |
-| curb_policy_id  | UUID (PRIMARY KEY) | Y             |
-| name            | VARCHAR            | N             |
-| description     | TEXT               | N             |
-| published_date  | TIMESTAMP          | Y             |
-| priority        | INTEGER            | Y             |
-| policy_color_id | UUID (FOREIGN KEY) | N             |
+| Column Name     | Type               | Spec Required | Populated |
+| --------------- | ------------------ | ------------- | --------- |
+| curb_policy_id  | UUID (PRIMARY KEY) | Y             | Y         |
+| name            | VARCHAR            | N             | Y         |
+| description     | TEXT               | N             | Y         |
+| published_date  | TIMESTAMP          | Y             | Y         |
+| priority        | INTEGER            | Y             | Y         |
+| policy_color_id | UUID (FOREIGN KEY) | N             | N         |
 
 ### curb_zone_policies
 
@@ -65,7 +65,9 @@ This join table links curb zones and policies.
 
 ### curb_policy_rules
 
-This table lists each rule associated with each policy.
+This table lists each rule associated with each policy. Although all fields
+are populated, some will be left blank except in cases where the sign reader identifies
+relevant information.
 
 | Column Name         | Type               | Spec Required |
 | ------------------- | ------------------ | ------------- |
