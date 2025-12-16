@@ -106,3 +106,19 @@ This table lists each timespan associated with each policy.
 | time_of_day_end          | VARCHAR            | N             |
 | designated_period        | VARCHAR            | N             |
 | designated_period_except | BOOLEAN            | N             |
+
+### curb_policy_colors
+
+This table contains a list of unique color objects that can be assigned
+to a policy. A color is assigned to a policy using the color's UUID.
+
+| Column Name                   | Type               | Spec Required |
+| ----------------------------- | ------------------ | ------------- |
+| color_id                      | UUID (PRIMARY KEY) | Y             |
+| primary_color                 | VARCHAR            | Y             |
+| primary_pattern_type          | VARCHAR            | N             |
+| primary_border_color          | VARCHAR            | N             |
+| primary_border_pattern_type   | VARCHAR            | N             |
+| secondary_color               | VARCHAR            | N             |
+| secondary_border_color        | VARCHAR            | N             |
+| secondary_border_pattern_type | VARCHAR            | N             |
