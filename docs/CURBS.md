@@ -7,6 +7,14 @@ has been modified to identify elements of the specification implemented as part
 of this API. Aspects of the Curbs API not implemented at this time have been
 moved into collapsable sections.
 
+Some fields defined the spec are optional and not currently implemented. Instead of returning
+these fields as `null`, the API will exclude them from any output if they do not have values present
+in the database. The [database spec](./CURBS_database.md) defines fields that are present. If these fields
+are popualted at a later date, the data will be returned for records with data present.
+
+Fields that have other dependencies are identified below and are not included in the current
+database spec. Addition of these fields (e.g., Areas) will require more extensive changes.
+
 **See [the complete specification and other CDS APIs](https://github.com/openmobilityfoundation/curb-data-specification/blob/main/README.md) on the homepage.**
 
 # Endpoints
@@ -72,13 +80,13 @@ There are four different endpoints that are part of the Curbs API, two of which 
 
 # REST Endpoints
 
-All endpoints return a JSON object containing the fields as specified in the [REST Endpoint](/general-information.md#rest-endpoints) details.
+All endpoints return a JSON object containing the fields as specified in the [REST Endpoint](https://github.com/openmobilityfoundation/curb-data-specification/blob/main/general-information.md) details.
 
 [Top][toc]
 
 ## Authorization
 
-[Authorization](/general-information.md#authorization) is not required for any of the Curbs endpoints, as this information should be made public and easily accessible.
+[Authorization](https://github.com/openmobilityfoundation/curb-data-specification/blob/main/general-information.md#authorization) is not required for any of the Curbs endpoints, as this information should be made public and easily accessible.
 Free to acquire API keys or authorization may be utilized by the public agency to track usage, prevent abuse, or for certain mobility programs or pilots.
 
 [Top][toc]
@@ -565,6 +573,7 @@ A Policy is represented as a JSON object whose fields are as follows:
 | `priority`       | Integer                           | Required          | Specifies which other policies this one takes precedence over. If two Policies on the same Curb Zone have overlapping [Time Spans](#time-span) and apply to the same user class, the one that applies at a given time is the one with the **lowest** priority. E.g., a priority of `1` takes precedence over a priority of `3`. Two Policies that apply to the same Curb Zone with overlapping Time Spans MAY ONLY have the same priority if the policies apply to disjoint User Classes or disjoint Activities. |
 | `rules`          | Array of [Rules](#rule)           | Required          | The rule(s) that this policy applies. If a Policy specifies multiple rules, each rule MUST specify disjoint lists of user classes.                                                                                                                                                                                                                                                                                                                                                                               |
 | `time_spans`     | Array of [Time Spans](#time-span) | Optional          | If specified, this regulation only applies at the times defined within.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `policy_color`   | [Policy Color](#policy-color)     | Optional          | A JSON object that defines the official colors used to represent this specific policy, used in physical curb paint, digital and print maps, etc.                                                                                                                                                                                                                                                                                                                                                                 |
 
 Remaining fields will not be filled as part of the Boston SMART grant effort to populate a curb database
 and have not yet been implemented in the database structure or API.
@@ -575,7 +584,6 @@ and have not yet been implemented in the database structure or API.
 | Name                      | Type                                                      | Required/Optional | Description                                                                                                                                                                                                                                                                                                                                                                           |
 | ------------------------- | --------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `data_source_operator_id` | Array of [UUIDs][uuid]                                    | Optional\*        | An array of Data Source Operator IDs that this policy only applies to. IDs come from [data_source_operators.csv](/data_source_operators.csv) file here in the CDS repo. Read our [How to Get a Data Source Operator ID](https://github.com/openmobilityfoundation/curb-data-specification/wiki/Adding-a-CDS-Data-Source-Operator-ID) guide.                                           |
-| `policy_color`            | [Policy Color](#policy-color)                             | Optional\*        | A JSON object that defines the official colors used to represent this specific policy, used in physical curb paint, digital and print maps, etc.                                                                                                                                                                                                                                      |
 | `external_references`     | Array of [External Reference][external-reference] objects | Optional\*        | One or more references to external data sources impacting this Curb Policy. References external sources that are relevant to this Policy at the time of its creation. More specific and timely external references can be made in related Zones, Spaces, and Areas. This field can be changed without requiring a new `curb_policy_id`, as it does not impact the policy definitions. |
 
 _\* These fields are not included in the database structure as they reference optional aspects of CDS that have not yet been implemented for this API_
@@ -820,10 +828,6 @@ A Previous Policy is a JSON object with the following fields:
 
 ## Policy Color
 
-_Not Implemented._
-
-<details>
-
 Information about colors that apply to a specific [Policy](#policy), which in turn connects to a physical or digital [curb zone](#curb-zone). Colors reflect the physical paint color at the curb zone. Displaying visually on a map or other location may or may not align with the physical colors, per the needs of the agency. Colors are defined with RGB hex values, and should approximate real-world paint or print as closely as possible, but may not capture the entire color gamut.
 
 A Policy Color is a JSON object with the following fields:
@@ -837,8 +841,6 @@ A Policy Color is a JSON object with the following fields:
 | `secondary_color`               | Hex  | Optional          | The 6 digit hex value of the secondary curb color.                                                                                                                        |
 | `secondary_border_color`        | Hex  | Optional          | The 6 digit hex value of the `secondary_color` border color.                                                                                                              |
 | `secondary_border_pattern_type` | Enum | Optional          | One of `solid`, `long_dash`, `short_dash`, `dot`, `dot_dash`, `diagonal` to define the type of pattern on the `secondary_border_color`.                                   |
-
-</details>
 
 [Top][toc]
 
