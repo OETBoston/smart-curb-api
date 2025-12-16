@@ -2,23 +2,27 @@
 
 <a href="/curbs/"><img src="https://i.imgur.com/aBqI6yr.png" width="100" align="right" alt="CDS Curbs Icon" border="0"></a>
 
-The Curbs API is a REST API allowing cities to specify areas of interest along and around the curb, objects in and
-near the curb or on sidewalks or travel lanes, and off street parking areas. Included are
-the rules and policies for using these area: who is allowed to park, load, unload, pick up, drop off, etc.,
-for how long, for what price (if any), at what times, and on which days.
+This is an **abridged copy** of the Curbs API specification, version 1.1. It
+has been modified to identify elements of the specification implemented as part
+of this API. Aspects of the Curbs API not implemented at this time have been
+moved into collapsable sections.
 
-Locations defined in the Curbs API can be connected to [Event](/events) and [Metrics](/metrics) data, and can be shared with companies and the public, for
-purposes such as routing, finding legal parking, loading, and pick-up/drop-off spots, enforcement, compliance, and analyzing
-curb utilization over time.
-
-**See [other CDS APIs](/README.md#endpoints) on the homepage.**
+**See [the complete specification and other CDS APIs](/README.md#endpoints) on the homepage.**
 
 # Endpoints
 
-There are four different endpoints that are part of the Curbs API:
+There are four different endpoints that are part of the Curbs API, two of which are implemented in this API:
 
 - A [Curb Zone](#curb-zone) is a contiguous region of curb space on a single block face that is
   regulated in a particular way. Defining curb zones is _required_ as part of the Curbs API.
+- A [Curb Policy](#policy) A Policy is a rule that allows or prohibits a particular set of
+  users from using a particular curb at a particular time or times. Curb policies are _optional_
+  but recommended with Curb Zones.
+
+<details>
+
+<summary>Endpoints not yet implemented</summary>
+
 - A [Curb Space](#curb-space) is a defined vehicle parking spot along the curb for use by one
   vehicle at a time. Curb spaces are _optional_.
 - A [Curb Area](#curb-area) is a larger area of interest, such as a neighborhood or corridor, that
@@ -26,9 +30,8 @@ There are four different endpoints that are part of the Curbs API:
   are _optional_.
 - A [Curb Object](#curb-object) is a physical item or asset located adjacent to, within, or associated with a curb space
   that is grouped under a certain type and contains a unique set of attributes. Curb objects are _optional_.
-- A [Curb Policy](#policy) A Policy is a rule that allows or prohibits a particular set of
-  users from using a particular curb at a particular time or times. Curb policies are _optional_
-  but recommended with Curb Zones.
+
+</details>
 
 **See [examples](https://github.com/openmobilityfoundation/curb-data-specification/wiki/CDS-Metrics-Examples) for these endpoints.**
 
@@ -106,6 +109,10 @@ All query parameters are optional.
 
 **Endpoint**: `/curbs/areas`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: a JSON object with an `areas` field containing an array of [Curb Area](#curb-area) objects.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -119,12 +126,18 @@ All query parameters are optional.
 | `min_lat`<br/>`min_lng`<br/>`max_lat`<br/>`max_lng` | Numeric | Specifies a bounding box; if one of these parameters is specified, all four MUST be. If specified only return Curb Areas that intersect the supplied bounding box.                                                                                       |
 | `lat`<br/>`lng`<br/>`radius`                        | Numeric | If one of these parameters is specified, all three MUST be. Returns only Curb Areas that are within `radius` centimeters of the point identified by `lat`/`lng`. Curb Areas in the response MUST be ordered ascending by distance from the center point. |
 
+</details>
+
 [Top][toc]
 
 ## Query Curb Spaces
 
 **Endpoint**: `/curbs/spaces`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: a JSON object with a `spaces` field containing an array of [Curb Space](#curb-space) objects.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -139,6 +152,8 @@ All query parameters are optional.
 | `min_lat`<br/>`min_lng`<br/>`max_lat`<br/>`max_lng` | Numeric         | Specifies a bounding box; if one of these parameters is specified, all four MUST be. If specified only return Curb Zones that intersect the supplied bounding box.                                                                                         |
 | `lat`<br/>`lng`<br/>`radius`                        | Numeric         | If one of these parameters is specified, all three MUST be. Returns only Curb Spaces that are within `radius` centimeters of the point identified by `lat`/`lng`. Curb Spaces in the response MUST be ordered ascending by distance from the center point. |
 | `time`                                              | [Timestamp][ts] | Availability data (if supplied) will be returned as of this time.                                                                                                                                                                                          |
+
+</details>
 
 [Top][toc]
 
@@ -164,6 +179,10 @@ All query parameters are optional.
 
 **Endpoint**: `/curbs/objects`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: a JSON object with a `objects` field containing an array of [Curb Object](#curb-object) objects.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -177,6 +196,8 @@ All query parameters are optional.
 | `time`  | [Timestamp][ts] | Only the most recently updated objects as of this time will be returned.                                    |
 | `zone`  | [UUID][uuid]    | The ID of a [Curb Zone](#curb-zone). If specified, only return Curb Objects associated within this zone.    |
 | `space` | [UUID][uuid]    | The ID of a [Curb Space](#curb-space). If specified, only return Curb Objects associated within this space. |
+
+</details>
 
 [Top][toc]
 
@@ -203,6 +224,10 @@ All query parameters are optional.
 
 **Endpoint**: `/curbs/areas/<id>`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: the [Curb Area](#curb-area) object with the ID provided in the path.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -211,12 +236,18 @@ _Optional endpoint. If not implemented, the server should reply with `501 Not Im
 
 This endpoint takes no query parameters.
 
+</details>
+
 [Top][toc]
 
 ## Fetch a Curb Space
 
 **Endpoint**: `/curbs/spaces/<id>`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: the [Curb Space](#curb-space) object with the ID provided in the path.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -241,12 +272,18 @@ All query parameters are optional.
 
 This endpoint takes no query parameters.
 
+</details>
+
 [Top][toc]
 
 ## Fetch a Curb Object
 
 **Endpoint**: `/curbs/objects/<id>`  
 **Method**: `GET`  
+_Not Implemented._
+
+<details>
+
 `data` **Payload**: the [Curb Object](#curb-object) object with the ID provided in the path.
 
 _Optional endpoint. If not implemented, the server should reply with `501 Not Implemented`._
@@ -258,6 +295,8 @@ All query parameters are optional.
 | Name   | Type            | Description                                                       |
 | ------ | --------------- | ----------------------------------------------------------------- |
 | `time` | [Timestamp][ts] | Availability data (if supplied) will be returned as of this time. |
+
+</details>
 
 [Top][toc]
 
@@ -337,6 +376,10 @@ The `curb_zone_id` field uniquely identifies a particular zone with one particul
 
 ## Curb Area
 
+_Not Implemented._
+
+<details>
+
 Defines curb areas in a city and their properties. A Curb Area is a particular neighborhood or area
 of interest that includes one or more [Curb Zones](#curb-zone). Important notes about Curb Areas:
 
@@ -359,9 +402,15 @@ A Curb Area is represented as a JSON object, whose fields are as follows:
 | `custom_attributes`   | [Custom Attributes](/data-types.md#custom-attributes) JSON Object | Optional          | Additional attributes (fields and data) to include in this [endpoint](/general-information.md#rest-endpoints).                                                                                                                        |
 | `external_references` | Array of [External Reference][external-reference] objects         | Optional          | One or more references to external data feeds impacting this Curb Area. References external data that is relevant to this Area now. If the external reference is temporary, it should be added, then removed when no longer relevant. |
 
+</details>
+
 [Top][toc]
 
 ## Curb Space
+
+_Not Implemented._
+
+<details>
 
 Defines individual demarcated spaces within a Curb Zone. Important notes about Curb Spaces:
 
@@ -388,9 +437,15 @@ A Curb Space is represented as a JSON object whose fields are as follows:
 | `custom_attributes`   | [Custom Attributes](/data-types.md#custom-attributes) JSON Object | Optional               | Additional attributes (fields and data) to include in this [endpoint](/general-information.md#rest-endpoints).                                                                                                                                                                                                                                                                                  |
 | `external_references` | Array of [External Reference][external-reference] objects         | Optional               | One or more references to external data feeds impacting this Curb Space. References external data that is relevant to this Space now. If the external reference is temporary, it should be added, then removed when no longer relevant.                                                                                                                                                         |
 
+</details>
+
 [Top][toc]
 
 ## Curb Object
+
+_Not Implemented._
+
+<details>
 
 Defines individual assets located adjacent to, overlapping, within, or associated with a Curb Space or Curb Zone. Important notes about Curb Objects:
 
@@ -473,6 +528,8 @@ Curbside Obstacles
 Other
 
 - `food_vendor`
+
+</details>
 
 [Top][toc]
 
@@ -676,6 +733,10 @@ A Rate defines the amount a user of the curb needs to pay when a given rule appl
 
 ## Location Reference
 
+_Not Implemented._
+
+<details>
+
 A Location Reference defines a linear reference for a given Curb Zone. A linear reference defines a Curb Zone's position by reference to a linear feature, like a street centerline or edge-of-pavement line. Linear referencing systems can be global, like [SharedStreets linear references](https://sharedstreets.io/) or [OpenLR](http://www.openlr.org/index.html), or local to a particular city.
 
 A Location Reference is a JSON object with the following fields:
@@ -688,9 +749,15 @@ A Location Reference is a JSON object with the following fields:
 | `end`    | Integer | Required          | The distance (in centimeters) from the start of the referenced linear feature to the end of the Curb Zone (_exclusive_, see [Range Boundaries](/general-information.md#range-boundaries)). 'end' MAY be smaller than start, implying that the direction of the Curb Zone is opposite to the direction of the referenced linear feature - in this case the [Range Boundaries](/general-information.md#range-boundaries)) are reversed. |
 | `side`   | String  | Optional          | If the referenced linear feature is a roadway, the side of the roadway on which the Curb Zone may be found, when heading from the start to the end of the feature in its native orientation. Values are `left` and `right`. MUST be absent for features where `entire_roadway` is true.                                                                                                                                               |
 
+</details>
+
 [Top][toc]
 
 ## Previous Policy
+
+_Not Implemented._
+
+<details>
 
 An array of information about what previous policies applied to a [curb zone](#curb-zone) and when. This allows cities to historically track what policies applied to a curb zone.
 
@@ -702,9 +769,15 @@ A Previous Policy is a JSON object with the following fields:
 | `start_date`      | [Timestamp][ts]        | Required          | The date/time that this policy started being active for this curb location (_inclusive_, see [Range Boundaries](/general-information.md#range-boundaries)). |
 | `end_date`        | [Timestamp][ts]        | Required          | The date/time that this policy ended being active for this curb location (_exclusive_, see [Range Boundaries](/general-information.md#range-boundaries)).   |
 
+</details>
+
 [Top][toc]
 
 ## Policy Color
+
+_Not Implemented._
+
+<details>
 
 Information about colors that apply to a specific [Policy](#policy), which in turn connects to a physical or digital [curb zone](#curb-zone). Colors reflect the physical paint color at the curb zone. Displaying visually on a map or other location may or may not align with the physical colors, per the needs of the agency. Colors are defined with RGB hex values, and should approximate real-world paint or print as closely as possible, but may not capture the entire color gamut.
 
@@ -719,6 +792,8 @@ A Policy Color is a JSON object with the following fields:
 | `secondary_color`               | Hex  | Optional          | The 6 digit hex value of the secondary curb color.                                                                                                                        |
 | `secondary_border_color`        | Hex  | Optional          | The 6 digit hex value of the `secondary_color` border color.                                                                                                              |
 | `secondary_border_pattern_type` | Enum | Optional          | One of `solid`, `long_dash`, `short_dash`, `dot`, `dot_dash`, `diagonal` to define the type of pattern on the `secondary_border_color`.                                   |
+
+</details>
 
 [Top][toc]
 
