@@ -87,10 +87,12 @@ CREATE TABLE IF NOT EXISTS curb_policy_time_spans (
 
 -- Create Views
 
+DROP VIEW IF EXISTS vw_curb_zones;
 CREATE OR REPLACE VIEW vw_curb_zones AS
 SELECT
     cz.curb_zone_id,
     cz.geometry,
+    ST_AsGeoJSON(cz.geometry) AS geometry_json, 
     ARRAY(
         SELECT curb_policy_id
         FROM curb_zone_policies czp
@@ -120,6 +122,7 @@ SELECT
     cz.entire_roadway
 FROM curb_zones cz;
 
+DROP VIEW IF EXISTS vw_curb_policies;
 CREATE OR REPLACE VIEW vw_curb_policies AS
 SELECT
     cp.curb_policy_id,
