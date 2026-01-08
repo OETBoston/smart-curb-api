@@ -82,6 +82,7 @@ relevant information.
 | description         | TEXT               | N             |
 | activity            | VARCHAR            | N             |
 | max_stay            | INTEGER            | N             |
+| max_stay_unit       | VARCHAR            | N             |
 | no_return           | INTEGER            | N             |
 | no_return_unit      | VARCHAR            | N             |
 | user_classes        | TEXT[]             | N             |

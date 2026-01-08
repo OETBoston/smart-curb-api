@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS curb_policy_rules (
     description TEXT,
     activity VARCHAR,
     max_stay INTEGER,
+    max_stay_unit VARCHAR,
     no_return INTEGER,
     no_return_unit VARCHAR,
     user_classes TEXT[],
