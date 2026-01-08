@@ -29,3 +29,28 @@ sudo -u postgres psql -d smart_curb_db -f sql/init_db.sql
 ```
 
 Finally, import test data into the database. The shell script `scripts/load_data.sh` provides a sample approach. You can either run the script as-is, make edits for your database situation, or enter similar commands to load data.
+
+
+### Some tips for connecting via a command line:
+
+To connect to psql, use:
+
+```bash
+psql -U my-username -d cds -h localhost -p 5432
+```
+
+And modify parameters as needed. You will likely be prompted for a password.
+
+From the `psql` prompt, you can set a schema (for example, public_cds) and then run a SQL script with the following:
+
+```psql
+SET search_path = public_cds, public;
+\i init_sql;
+```
+The path must also include `public` so psql knows where to find the PostGIS extension.
+
+After creating the tables and views, you can load data from CSV, or by other means. If loading from CSV, you can run commands like:
+
+```psql
+\copy table_name from '../test-data/table_name.csv' WITH (FORMAT csv, HEADER true);
+```
