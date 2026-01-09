@@ -54,3 +54,24 @@ After creating the tables and views, you can load data from CSV, or by other mea
 ```psql
 \copy table_name from '../test-data/table_name.csv' WITH (FORMAT csv, HEADER true);
 ```
+
+### Process to update public_cds
+
+1. Create a new schema named `public_cds_next`.
+2. Load data into the new schema, verify that it is valid.
+3. Swap schema names and add user permissions in one transaction with:
+
+```sql
+BEGIN;
+DROP SCHEMA IF EXISTS public_cds_previous;
+ALTER SCHEMA public_cds RENAME TO public_cds_previous;
+ALTER SCHEMA public_cds_next RENAME TO public_cds;
+
+GRANT USAGE ON SCHEMA public_cds TO "cds-api";
+GRANT SELECT ON ALL TABLES IN SCHEMA public_cds TO "cds-api";
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public_cds
+GRANT SELECT ON TABLES TO "cds-api";
+
+COMMIT;
+```
