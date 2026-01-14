@@ -1,0 +1,10 @@
+rule_id,curb_policy_id,name,description,activity,max_stay,no_return,no_return_unit,user_classes,user_classes_except,purposes
+6259a09a-35b3-42dc-b4b3-8d698b65fef7,d54fe96d-4547-5604-923a-bbb00eb7e1bc,,,parking,120,,,,,
+4cfde0af-c8a4-41d8-b033-38a437b57861,0c2b055f-32be-50eb-bd83-75a1be25da10,BOSCDS-0,,parking,,,,,,
+69d14fbf-f2f5-4f44-b3be-110d81b8b7b0,758a24b8-20d2-51ba-a427-7a7c3a590a49,T-23,,no stopping,,,,,,
+5ee344a5-58f1-46ed-b302-78e56a7dc27e,81cf8a6c-aafc-54e2-acf8-1a88a5256720,BOSCDS-1,,no parking,,,,,,
+1f9cf076-6b0c-4c9b-b235-af5c1aa9060e,81cf8a6c-aafc-54e2-acf8-1a88a5256720,,,loading,30,,,,,
+d95108d2-c5cb-4500-b4b7-7202f20885ef,16d32936-f994-5b24-bf30-9a6c76535c17,BOSCDS-2,,no parking,,,,{car},,
+35b2deed-1d47-4741-be7a-68374faae31e,16d32936-f994-5b24-bf30-9a6c76535c17,,,loading,30,,,{truck},,
+65e4d79e-2d62-4be4-9d55-4025580a84cc,16d32936-f994-5b24-bf30-9a6c76535c17,,,loading,30,,,{van},,
+8ccc83ac-f8c5-412e-b766-6f9435724391,b77d8ae7-be69-5bb7-9df0-977e5be25046,BOSCDS-3,,stopping,,,,{bus},,

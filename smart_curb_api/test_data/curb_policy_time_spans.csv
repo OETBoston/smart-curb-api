@@ -1,0 +1,7 @@
+time_span_id,curb_policy_id,start_date,end_date,days_of_week,days_of_month,weeks_of_month,months,time_of_day_start,time_of_day_end,designated_period,designated_period_except
+c67babe6-a348-4e16-b124-9646fd2b076a,d54fe96d-4547-5604-923a-bbb00eb7e1bc,2025-12-12 00:18:58,,"{mon, tue, wed, thu, fri}",,,,8:00,18:00,,
+a2171eee-219e-4175-b1e3-9f4633610f47,0c2b055f-32be-50eb-bd83-75a1be25da10,2025-12-12 00:18:58,,,,,,,,,
+0bc083e2-ff99-460d-b88e-4f0b765ed66b,758a24b8-20d2-51ba-a427-7a7c3a590a49,2025-12-12 00:18:58,,,,,,,,,
+1bfb6f05-40eb-49f7-b67e-253e654d0f13,81cf8a6c-aafc-54e2-acf8-1a88a5256720,2025-12-12 00:18:58,,"{mon, tue, wed, thu, fri}",,,,7:00,11:00,,
+f99a45f8-44a5-4f36-ac00-779e9be9a831,16d32936-f994-5b24-bf30-9a6c76535c17,2025-12-12 00:18:58,,"{mon, tue, wed, thu, fri}",,,,11:00,19:00,,
+2828331c-d8c9-4006-8538-2077f0010c9c,b77d8ae7-be69-5bb7-9df0-977e5be25046,2025-12-12 00:18:58,,,,,,,,,

@@ -1,0 +1,7 @@
+curb_policy_id,name,description,published_date,priority,policy_color_id
+d54fe96d-4547-5604-923a-bbb00eb7e1bc,P-6A,"2 hour parking, Monday to Friday, 8am to 6pm",2025-12-12 00:18:58,3,81f0861f-25de-49f8-9302-41fbdfa571f3
+0c2b055f-32be-50eb-bd83-75a1be25da10,BOSCDS-0,All parking allowed at all times,2025-12-12 00:18:58,4,81f0861f-25de-49f8-9302-41fbdfa571f3
+758a24b8-20d2-51ba-a427-7a7c3a590a49,T-23,No stopping at any time,2025-12-12 00:18:58,2,81f0861f-25de-49f8-9302-41fbdfa571f3
+81cf8a6c-aafc-54e2-acf8-1a88a5256720,BOSCDS-1,"No parking, 30-min loading weekdays 7am-11am",2025-12-12 00:18:58,1,81f0861f-25de-49f8-9302-41fbdfa571f3
+16d32936-f994-5b24-bf30-9a6c76535c17,BOSCDS-2,"No parking for cars, 30-min loading for trucks",2025-12-12 00:18:58,1,81f0861f-25de-49f8-9302-41fbdfa571f3
+b77d8ae7-be69-5bb7-9df0-977e5be25046,BOSCDS-3,Bus stop only,2025-12-12 00:18:58,1,81f0861f-25de-49f8-9302-41fbdfa571f3
