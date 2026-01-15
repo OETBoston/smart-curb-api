@@ -108,7 +108,7 @@ async def query_curb_zones(
             street_side,
             median,
             entire_roadway
-        FROM vw_curb_zones
+        FROM public_cds.vw_curb_zones
         WHERE 1=1"""
     parms = {}
 
@@ -146,8 +146,8 @@ async def query_curb_zones(
     }
 
 
-# Example request: /curbs/zones/7cb610f7-e0ea-5d5f-b530-77fce4dbda9f
-# Example request: /curbs/zones/7cb610f7-e0ea-5d5f-b530-77fce4dbda9f?time=1765498738000
+# Example request: /curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb
+# Example request: /curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb?time=1765498738000
 @app.get("/curbs/zones/{id}")
 async def fetch_curb_zone(
     id: uuid.UUID,
@@ -184,7 +184,7 @@ async def fetch_curb_zone(
             street_side,
             median,
             entire_roadway
-        FROM vw_curb_zones
+        FROM public_cds.vw_curb_zones
         WHERE curb_zone_id = %(id)s"""
     parms = {'id': id}
 
@@ -202,7 +202,7 @@ async def fetch_curb_zone(
 
 
 # Example request: /curbs/policies
-# Example request: /curbs/policies?ids=d54fe96d-4547-5604-923a-bbb00eb7e1bc,0c2b055f-32be-50eb-bd83-75a1be25da10
+# Example request: /curbs/policies?ids=0076db6b-7ff1-5aa8-98e0-b36548ace1ca,007b3f23-83b9-51ce-8983-83dc03ebee71
 @app.get("/curbs/policies")
 async def query_curb_policies(ids: str = None):
     query = """
@@ -215,7 +215,7 @@ async def query_curb_policies(ids: str = None):
             rules,
             time_spans,
             policy_color
-        FROM vw_curb_policies
+        FROM public_cds.vw_curb_policies
         WHERE 1=1"""
     parms = {}
 
@@ -232,7 +232,7 @@ async def query_curb_policies(ids: str = None):
     }
 
 
-# Example request: /curbs/policies/d54fe96d-4547-5604-923a-bbb00eb7e1bc
+# Example request: /curbs/policies/0076db6b-7ff1-5aa8-98e0-b36548ace1ca
 @app.get("/curbs/policies/{id}")
 async def fetch_curb_policy(id: uuid.UUID):
     query = """
@@ -245,7 +245,7 @@ async def fetch_curb_policy(id: uuid.UUID):
             rules,
             time_spans,
             policy_color
-        FROM vw_curb_policies
+        FROM public_cds.vw_curb_policies
         WHERE curb_policy_id = %(id)s"""
     parms = {'id': id}
 
