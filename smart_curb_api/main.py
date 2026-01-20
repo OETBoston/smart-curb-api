@@ -19,6 +19,7 @@ url_object = URL.create(
     host=os.environ['DB_HOST'],
     database=os.environ['DB_NAME']
 )
+
 ENGINE = create_engine(url_object)
 
 RESPONSE_DEFAULT_PARMS = {
@@ -35,13 +36,7 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",    # For local development
-        "http://localhost:8080",    # Alternative local port
-        "http://localhost:5173",    # Vite default port
-        # Add your developer's production frontend URL here when you know it
-        # "https://their-map-frontend.boston.gov",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,  # Required for IAP authentication
     allow_methods=["*"],     # Allow all HTTP methods
     allow_headers=["*"],     # Allow all headers including Authorization
@@ -108,7 +103,7 @@ async def query_curb_zones(
             street_side,
             median,
             entire_roadway
-        FROM vw_curb_zones
+        FROM public_cds.vw_curb_zones
         WHERE 1=1"""
     parms = {}
 
@@ -184,7 +179,7 @@ async def fetch_curb_zone(
             street_side,
             median,
             entire_roadway
-        FROM vw_curb_zones
+        FROM public_cds.vw_curb_zones
         WHERE curb_zone_id = %(id)s"""
     parms = {'id': id}
 
@@ -215,7 +210,7 @@ async def query_curb_policies(ids: str = None):
             rules,
             time_spans,
             policy_color
-        FROM vw_curb_policies
+        FROM public_cds.vw_curb_policies
         WHERE 1=1"""
     parms = {}
 
@@ -245,7 +240,7 @@ async def fetch_curb_policy(id: uuid.UUID):
             rules,
             time_spans,
             policy_color
-        FROM vw_curb_policies
+        FROM public_cds.vw_curb_policies
         WHERE curb_policy_id = %(id)s"""
     parms = {'id': id}
 
