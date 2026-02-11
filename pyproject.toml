@@ -1,0 +1,14 @@
+[project]
+name = "smart-curb-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=3.0.0",
+    "smart-curb-db",
+]
+
+[tool.uv.sources]
+smart-curb-db = { git = "https://github.com/OETBoston/smart-curb-db.git" }
+
