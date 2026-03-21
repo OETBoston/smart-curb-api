@@ -10,8 +10,22 @@ from utils import read_public_cds_schema, read_staging_schema, process_updates, 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Good including logging and setting up a format.
+# For actual logging, we should use
+# logger = logging.getLogger(__name__)
+# and then use logger.info("message")
+# This will allow logger settings to be taken care of externally as we 
+# combine the different parts
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
+# Recommend including database name and schema as required args to main, 
+# and passing them through when reading data.
+#
+# See notes elsewhere about job_id being optional or required.
+#
+# Need to use type of str | None for job_id if we keep it optional.
 def main(job_id: str = None) -> None:
     """
     Orchestrates curb policy update processing and CSV export.
