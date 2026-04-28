@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS curb_zones (
     entire_roadway BOOLEAN
 );
 
+CREATE INDEX idx_curb_zones_geometry ON curb_zones USING gist (geometry);
+
 CREATE TABLE IF NOT EXISTS curb_policy_colors (
     color_id UUID PRIMARY KEY,
     primary_color VARCHAR,
