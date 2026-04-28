@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS curb_policy_rates (
     increment_amount INTEGER,
     start_duration INTEGER,
     end_duration INTEGER,
-    max_fee INTEGER,
+    max_fee INTEGER
 );
 
 -- Create Views
