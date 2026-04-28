@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS curb_zones (
     entire_roadway BOOLEAN
 );
 
+CREATE INDEX idx_curb_zones_geometry ON curb_zones USING gist (geometry);
+
 CREATE TABLE IF NOT EXISTS curb_policy_colors (
     color_id UUID PRIMARY KEY,
     primary_color VARCHAR,
@@ -84,6 +86,23 @@ CREATE TABLE IF NOT EXISTS curb_policy_time_spans (
     time_of_day_end VARCHAR,
     designated_period VARCHAR,
     designated_period_except BOOLEAN
+);
+
+
+CREATE TYPE rate_unit_enum AS ENUM ('second', 'minute', 'hour', 'day', 'week', 'month', 'year');
+CREATE TYPE rate_unit_period_enum as ENUM ('rolling', 'calendar');
+
+CREATE TABLE IF NOT EXISTS curb_policy_rates (
+    rate_id UUID PRIMARY KEY,
+    curb_policy_id UUID REFERENCES curb_policies(curb_policy_id),
+    rate INTEGER,
+    rate_unit rate_unit_enum,
+    rate_unit_period rate_unit_period_enum default 'rolling',
+    increment_duration INTEGER,
+    increment_amount INTEGER,
+    start_duration INTEGER,
+    end_duration INTEGER,
+    max_fee INTEGER,
 );
 
 -- Create Views
@@ -141,6 +160,11 @@ SELECT
         FROM curb_policy_time_spans t
         WHERE t.curb_policy_id = cp.curb_policy_id
     ) AS time_spans,
+    (
+        SELECT jsonb_agg(to_jsonb(rt))
+        FROM curb_policy_rates rt
+        WHERE rt.curb_policy_id = cp.curb_policy_id
+    ) AS rates,
     (
         SELECT to_jsonb(c)
         FROM curb_policy_colors c

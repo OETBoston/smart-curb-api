@@ -108,6 +108,24 @@ This table lists each timespan associated with each policy.
 | designated_period        | VARCHAR            | N             |
 | designated_period_except | BOOLEAN            | N             |
 
+
+### curb_policy_rates
+This table lists each rate associated with each policy.
+
+| Column Name              | Type               | Spec Required |
+| ------------------------ | ------------------ | ------------- |
+| rate_id                  | UUID (PRIMARY KEY) | Y             |
+| curb_policy_id           | UUID (FOREIGN KEY) | Y             |
+| rate                     | INTEGER            | Y             |
+| rate_unit                | ENUM               | Y             |
+| rate_unit_period         | ENUM               | N             |
+| increment_duration       | INTEGER            | N             |
+| increment_amount         | INTEGER            | N             |
+| start_duration           | INTEGER            | N             |
+| end_duration             | INTEGER            | N             |
+| max_fee                  | INTEGER            | N             |
+
+
 ### curb_policy_colors
 
 This table contains a list of unique color objects that can be assigned
