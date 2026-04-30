@@ -1,14 +1,14 @@
 
 BEGIN;
 
--- Move public_cds to public_cds_previous
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policy_rates CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policy_time_spans CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policy_rules CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_zone_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policy_colors CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_previous.curb_zones CASCADE;
+-- Phase 1: Move public_cds to public_cds_previous
+TRUNCATE TABLE IF EXISTS public_cds_previous.curb_policy_rates,
+                        public_cds_previous.curb_policy_time_spans,
+                        public_cds_previous.curb_policy_rules,
+                        public_cds_previous.curb_zone_policies,
+                        public_cds_previous.curb_policies,
+                        public_cds_previous.curb_policy_colors,
+                        public_cds_previous.curb_zones CASCADE;
 
 INSERT INTO public_cds_previous.curb_zones(
     curb_zone_id,
@@ -177,15 +177,15 @@ select
     time_span_id
 from public_cds.curb_policy_rates;
 
-TRUNCATE TABLE IF EXISTS public_cds.curb_policy_rates CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_policy_time_spans CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_policy_rules CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_zone_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_policy_colors CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds.curb_zones CASCADE;
+-- Phase 2: Move public_cds_next to public_cds
+TRUNCATE TABLE IF EXISTS public_cds.curb_policy_rates,
+                        public_cds.curb_policy_time_spans,
+                        public_cds.curb_policy_rules,
+                        public_cds.curb_zone_policies,
+                        public_cds.curb_policies,
+                        public_cds.curb_policy_colors,
+                        public_cds.curb_zones CASCADE;
 
--- Move public_cds_next to public_cds
 INSERT INTO public_cds.curb_zones(
     curb_zone_id,
     geometry,
@@ -353,13 +353,13 @@ select
     time_span_id
 from public_cds_next.curb_policy_rates;
 
--- Clear out public_cds_next for next update
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_policy_rates CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_policy_time_spans CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_policy_rules CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_zone_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_policies CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_policy_colors CASCADE;
-TRUNCATE TABLE IF EXISTS public_cds_next.curb_zones CASCADE;
+-- Phase 3: Clear out public_cds_next for next update
+TRUNCATE TABLE IF EXISTS public_cds_next.curb_policy_rates,
+                        public_cds_next.curb_policy_time_spans,
+                        public_cds_next.curb_policy_rules,
+                        public_cds_next.curb_zone_policies,
+                        public_cds_next.curb_policies,
+                        public_cds_next.curb_policy_colors,
+                        public_cds_next.curb_zones CASCADE;
 
 COMMIT;
