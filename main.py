@@ -39,6 +39,8 @@ app.add_middleware(
         "http://localhost:3000",    # For local development
         "http://localhost:8080",    # Alternative local port
         "http://localhost:5173",    # Vite default port
+        "https://oetboston.github.io/curb-atlas", # Might not be necessary, we can remove after testing
+        "https://oetboston.github.io",
         # Add your developer's production frontend URL here when you know it
         # "https://their-map-frontend.boston.gov",
     ],
