@@ -217,7 +217,8 @@ async def query_curb_policies(ids: str = None):
             priority,
             rules,
             time_spans,
-            policy_color
+            policy_color, 
+            rates
         FROM public_cds.vw_curb_policies
         WHERE 1=1"""
     parms = {}
@@ -247,7 +248,8 @@ async def fetch_curb_policy(id: uuid.UUID):
             priority,
             rules,
             time_spans,
-            policy_color
+            policy_color, 
+            rates
         FROM public_cds.vw_curb_policies
         WHERE curb_policy_id = %(id)s"""
     parms = {'id': id}
