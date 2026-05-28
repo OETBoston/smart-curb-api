@@ -10,8 +10,6 @@ from sqlalchemy.engine import URL
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-app.add_middleware(GZipMiddleware, minimum_size=1000)
-
 # TODO: Use Cloud Secret Manager (https://cloud.google.com/secret-manager) instead of env vars
 from dotenv import load_dotenv
 load_dotenv()
@@ -34,6 +32,9 @@ RESPONSE_DEFAULT_PARMS = {
 }
 
 app = FastAPI()
+
+# add compression
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Add CORS middleware
 app.add_middleware(
