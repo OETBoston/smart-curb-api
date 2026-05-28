@@ -8,6 +8,9 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # TODO: Use Cloud Secret Manager (https://cloud.google.com/secret-manager) instead of env vars
 from dotenv import load_dotenv
