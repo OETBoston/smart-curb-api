@@ -75,7 +75,7 @@ async def query_curb_zones(
     radius: float = None, # centimeters
     include_geometry: bool = True,
     time: int = None, # milliseconds # Is this optional?
-    limit: int = 1000,
+    limit: int = 10000,
     offset: int = 0
 ):
     if (min_lat or min_lng or max_lat or max_lng) and not (min_lat and min_lng and max_lat and max_lng):
