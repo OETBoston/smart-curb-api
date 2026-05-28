@@ -74,7 +74,9 @@ async def query_curb_zones(
     lng: float = None,
     radius: float = None, # centimeters
     include_geometry: bool = True,
-    time: int = None # milliseconds # Is this optional?
+    time: int = None, # milliseconds # Is this optional?
+    limit: int = 1000,
+    offset: int = 0
 ):
     if (min_lat or min_lng or max_lat or max_lng) and not (min_lat and min_lng and max_lat and max_lng):
         raise HTTPException(
@@ -141,6 +143,10 @@ async def query_curb_zones(
         query += ' AND COALESCE(start_date <= TO_TIMESTAMP(%(time)s / 1000.0), TRUE) AND COALESCE(end_date >= TO_TIMESTAMP(%(time)s / 1000.0), TRUE)'
         parms['time'] = time
 
+    query += ' ORDER BY curb_zone_id LIMIT %(limit)s OFFSET %(offset)s'
+    parms['limit'] = limit
+    parms['offset'] = offset
+
     with ENGINE.connect() as conn:
         df = pd.read_sql(query, conn, params=parms)
 
@@ -149,6 +155,8 @@ async def query_curb_zones(
 
     return {
         **RESPONSE_DEFAULT_PARMS,
+        "limit": limit,
+        "offset": offset,
         "data": {"zones": json.loads(df.to_json(orient='records', default_handler=str))}
     }
 
