@@ -5,7 +5,7 @@ import uuid
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
@@ -32,6 +32,16 @@ RESPONSE_DEFAULT_PARMS = {
 }
 
 app = FastAPI()
+
+#schema selection NOT AVAILABLE ON PUBLIC CDS 
+ALLOWED_SCHEMAS = {"public_cds", "chinatown_cds", "seaport_cds"}  # add/remove as neighborhoods are in progress
+
+def get_schema(schema: str | None) -> str:
+    if schema is None:
+        return "public_cds"
+    if schema not in ALLOWED_SCHEMAS:
+        raise HTTPException(status_code=400, detail=f"Unknown schema: {schema}")
+    return schema
 
 # add compression
 app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -76,8 +86,12 @@ async def query_curb_zones(
     include_geometry: bool = True,
     time: int = None, # milliseconds # Is this optional?
     limit: int = 10000,
-    offset: int = 0
+    offset: int = 0,
+    schema: str = None
 ):
+
+    schema = get_schema(schema)
+
     if (min_lat or min_lng or max_lat or max_lng) and not (min_lat and min_lng and max_lat and max_lng):
         raise HTTPException(
                 status_code=400,
@@ -117,7 +131,7 @@ async def query_curb_zones(
             street_side,
             median,
             entire_roadway
-        FROM public_cds.vw_curb_zones
+        FROM vw_curb_zones
         WHERE 1=1"""
     parms = {}
 
@@ -148,6 +162,7 @@ async def query_curb_zones(
     parms['offset'] = offset
 
     with ENGINE.connect() as conn:
+        conn.execute(text(f"SET search_path TO {schema}"))
         df = pd.read_sql(query, conn, params=parms)
 
     if not include_geometry:
@@ -167,8 +182,11 @@ async def query_curb_zones(
 async def fetch_curb_zone(
     id: uuid.UUID,
     time: int = None, # milliseconds # Is this optional?
-    show_historic: bool = False
+    show_historic: bool = False, 
+    schema: str = None
 ):
+
+    schema = get_schema(schema)
 
     # TODO: show_historic??
 
@@ -199,7 +217,7 @@ async def fetch_curb_zone(
             street_side,
             median,
             entire_roadway
-        FROM public_cds.vw_curb_zones
+        FROM vw_curb_zones
         WHERE curb_zone_id = %(id)s"""
     parms = {'id': id}
 
@@ -208,6 +226,7 @@ async def fetch_curb_zone(
         parms['time'] = time
 
     with ENGINE.connect() as conn:
+        conn.execute(text(f"SET search_path TO {schema}"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
@@ -219,7 +238,12 @@ async def fetch_curb_zone(
 # Example request: /curbs/policies
 # Example request: /curbs/policies?ids=0076db6b-7ff1-5aa8-98e0-b36548ace1ca,007b3f23-83b9-51ce-8983-83dc03ebee71
 @app.get("/curbs/policies")
-async def query_curb_policies(ids: str = None):
+async def query_curb_policies(
+    ids: str = None, 
+    schema: str = None
+    ):
+    schema = get_schema(schema)
+
     query = """
         SELECT
             curb_policy_id,
@@ -231,7 +255,7 @@ async def query_curb_policies(ids: str = None):
             time_spans,
             policy_color, 
             rates
-        FROM public_cds.vw_curb_policies
+        FROM vw_curb_policies
         WHERE 1=1"""
     parms = {}
 
@@ -240,6 +264,7 @@ async def query_curb_policies(ids: str = None):
         parms['ids'] = tuple(ids.split(','))
 
     with ENGINE.connect() as conn:
+        conn.execute(text(f"SET search_path TO {schema}"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
@@ -250,7 +275,12 @@ async def query_curb_policies(ids: str = None):
 
 # Example request: /curbs/policies/0076db6b-7ff1-5aa8-98e0-b36548ace1ca
 @app.get("/curbs/policies/{id}")
-async def fetch_curb_policy(id: uuid.UUID):
+async def fetch_curb_policy(
+    id: uuid.UUID,
+    schema: str = None):
+
+    schema = get_schema(schema)
+
     query = """
         SELECT
             curb_policy_id,
@@ -262,11 +292,12 @@ async def fetch_curb_policy(id: uuid.UUID):
             time_spans,
             policy_color, 
             rates
-        FROM public_cds.vw_curb_policies
+        FROM vw_curb_policies
         WHERE curb_policy_id = %(id)s"""
     parms = {'id': id}
 
     with ENGINE.connect() as conn:
+        conn.execute(text(f"SET search_path TO {schema}"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
