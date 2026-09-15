@@ -39,6 +39,8 @@ ALLOWED_SCHEMAS = {"public_cds", "chinatown_cds", "seaport_cds"}  # add/remove a
 def get_schema(schema: str | None) -> str:
     if schema is None:
         return "public_cds"
+    if os.environ.get("ALLOW_SCHEMA_OVERRIDE") != "true":
+        raise HTTPException(status_code=403, detail="Schema override is not enabled on this service")
     if schema not in ALLOWED_SCHEMAS:
         raise HTTPException(status_code=400, detail=f"Unknown schema: {schema}")
     return schema

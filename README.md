@@ -75,3 +75,23 @@ GRANT SELECT ON TABLES TO "cds-api";
 
 COMMIT;
 ```
+
+
+## Schema Selection (Dev Only)
+
+Endpoints accept an optional `schema` query parameter (e.g. `?schema=chinatown_cds`) that
+directs queries at a specific Postgres schema instead of the default `public_cds` (citywide)
+data. This exists to support in-progress, neighborhood-by-neighborhood data cleanup —
+each neighborhood's provisional data lives in its own schema until it's validated and
+merged back into `public_cds` (see "Process to update public_cds" above).
+
+**This is disabled by default and must never be enabled on the public production service.**
+It is gated behind the `ALLOW_SCHEMA_OVERRIDE` environment variable, which must be set to
+exactly `"true"` for the override to take effect. If the variable is unset, missing, or set
+to anything else, all requests are served from `public_cds` regardless of what `schema`
+value is passed — this is a deliberate fail-safe default, not just a default value.
+
+- **Production (`smart-curb-api`)**: `ALLOW_SCHEMA_OVERRIDE` must not be set.
+- **Dev (`smart-curb-api-dev`)**: `ALLOW_SCHEMA_OVERRIDE=true`.
+
+Valid schema names are maintained in the `ALLOWED_SCHEMAS` set in `main.py` and updated as neighborhoods enter and complete the cleanup process.
