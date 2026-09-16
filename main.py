@@ -164,7 +164,7 @@ async def query_curb_zones(
     parms['offset'] = offset
 
     with ENGINE.connect() as conn:
-        conn.execute(text(f"SET search_path TO {schema}"))
+        conn.execute(text(f"SET search_path TO {schema}, public"))
         df = pd.read_sql(query, conn, params=parms)
 
     if not include_geometry:
@@ -228,7 +228,7 @@ async def fetch_curb_zone(
         parms['time'] = time
 
     with ENGINE.connect() as conn:
-        conn.execute(text(f"SET search_path TO {schema}"))
+        conn.execute(text(f"SET search_path TO {schema}, public"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
@@ -266,7 +266,7 @@ async def query_curb_policies(
         parms['ids'] = tuple(ids.split(','))
 
     with ENGINE.connect() as conn:
-        conn.execute(text(f"SET search_path TO {schema}"))
+        conn.execute(text(f"SET search_path TO {schema}, public"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
@@ -299,7 +299,7 @@ async def fetch_curb_policy(
     parms = {'id': id}
 
     with ENGINE.connect() as conn:
-        conn.execute(text(f"SET search_path TO {schema}"))
+        conn.execute(text(f"SET search_path TO {schema}, public"))
         df = pd.read_sql(query, conn, params=parms)
 
     return {
