@@ -8,3 +8,9 @@ dependencies = [
     "psycopg2-binary==2.9.11",
     "sqlalchemy==2.0.45",
 ]
+
+[dependency-groups]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocs-swagger-ui-tag>=0.6",
+]

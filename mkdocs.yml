@@ -1,0 +1,57 @@
+site_name: City of Boston Curbs API
+site_description: Documentation for the City of Boston Curbs API (CDS Curbs v1.1)
+# TODO: set site_url and repo_url once the hosting target is chosen
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+    - content.tabs.link
+  palette:
+    - scheme: default
+      toggle: {icon: material/weather-night, name: Dark mode}
+    - scheme: slate
+      toggle: {icon: material/weather-sunny, name: Light mode}
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+nav:
+  - Home: index.md
+  - Getting started:
+      - Quickstart: getting-started/quickstart.md
+      - Scope and Data Coverage: getting-started/scope.md
+      - Authentication: getting-started/authentication.md
+      - Base URLs: getting-started/base-urls.md
+  - Guides:
+      - Finding zones: guides/finding-zones.md
+      - Time filtering: guides/time-filtering.md
+      - Pagination: guides/pagination.md
+      - Policies and rules: guides/policies-and-rules.md
+      - Response envelope: guides/response-envelope.md
+      - Errors: guides/errors.md
+  - Reference:
+      - API reference: reference/api.md
+      - CDS Curbs spec: CURBS.md
+      - Database tables: CURBS_database.md
+      - Database views: CURBS_views.md
+  - Examples:
+      - curl: examples/curl.md
+      - Python: examples/python.md
+      - JavaScript: examples/javascript.md
+  - Operations:
+      - Deployment: operations/deployment.md
+      - Data refresh: operations/data-refresh.md
+  - FAQ: faq.md
+  - Changelog: changelog.md
+  - Support: support.md
+
+plugins:
+  - search
+  - swagger-ui-tag
