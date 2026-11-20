@@ -427,6 +427,10 @@ if DOCS_SITE_DIR.is_dir():
         StaticFiles(directory=DOCS_SITE_DIR, html=True),
         name="documentation",
     )
+elif os.environ.get("REQUIRE_DOCS") == "1":
+    # Set REQUIRE_DOCS=1 in deployed environments so a build without docs fails to start
+    # (Cloud Run then keeps serving the previous revision) instead of silently omitting them.
+    raise RuntimeError(f"REQUIRE_DOCS=1 but docs site not found at {DOCS_SITE_DIR}")
 
 
 @app.get("/", include_in_schema=False)
