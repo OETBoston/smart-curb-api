@@ -418,9 +418,9 @@ Versionizer(
 ).versionize()
 
 
-# The MkDocs site (built with `mkdocs build` into ./site) is served under /documentation
+# The MkDocs site (built with `mkdocs build` into ./docs_site) is served under /documentation
 # (not versioned). /docs is taken by FastAPI's Swagger UI. If the site isn't built, the API still runs.
-DOCS_SITE_DIR = FilePath(__file__).resolve().parent / "site"
+DOCS_SITE_DIR = FilePath(__file__).resolve().parent / "docs_site"
 if DOCS_SITE_DIR.is_dir():
     app.mount(
         "/documentation",

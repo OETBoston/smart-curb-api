@@ -1,3 +1,4 @@
+site_dir: docs_site
 site_name: City of Boston Curbs API
 site_description: Documentation for the City of Boston Curbs API (CDS Curbs v1.1)
 # TODO: set site_url and repo_url once the hosting target is chosen
