@@ -9,7 +9,7 @@ moved into collapsable sections.
 
 Some fields defined the spec are optional and not currently implemented. Instead of returning
 these fields as `null`, the API will exclude them from any output if they do not have values present
-in the database. The [database spec](./CURBS_database.md) defines fields that are present. If these fields
+in the database. If these fields
 are popualted at a later date, the data will be returned for records with data present.
 
 Fields that have other dependencies are identified below and are not included in the current
@@ -47,20 +47,34 @@ There are four different endpoints that are part of the Curbs API, two of which 
 
 # Table of Contents
 
+- [Curb Data Specification: Curbs API](#curb-data-specification-curbs-api)
+- [Endpoints](#endpoints)
+- [Table of Contents](#table-of-contents)
 - [REST Endpoints](#rest-endpoints)
   - [Authorization](#authorization)
   - [Query Curb Zones](#query-curb-zones)
+    - [Query Parameters](#query-parameters)
   - [Query Curb Areas](#query-curb-areas)
+    - [Query Parameters](#query-parameters-1)
   - [Query Curb Spaces](#query-curb-spaces)
+    - [Query Parameters](#query-parameters-2)
   - [Query Curb Policies](#query-curb-policies)
+    - [Query Parameters](#query-parameters-3)
   - [Query Curb Objects](#query-curb-objects)
+    - [Query Parameters](#query-parameters-4)
   - [Fetch a Curb Zone](#fetch-a-curb-zone)
+    - [Query Parameters](#query-parameters-5)
   - [Fetch a Curb Area](#fetch-a-curb-area)
+    - [Query Parameters](#query-parameters-6)
   - [Fetch a Curb Space](#fetch-a-curb-space)
+    - [Query Parameters](#query-parameters-7)
   - [Fetch a Curb Policy](#fetch-a-curb-policy)
+    - [Query Parameters](#query-parameters-8)
   - [Fetch a Curb Object](#fetch-a-curb-object)
+    - [Query Parameters](#query-parameters-9)
 - [Data Objects](#data-objects)
   - [Curb Zone](#curb-zone)
+    - [Curb Zone ID Stability](#curb-zone-id-stability)
   - [Curb Area](#curb-area)
   - [Curb Space](#curb-space)
   - [Curb Object](#curb-object)

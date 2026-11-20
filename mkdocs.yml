@@ -9,6 +9,11 @@ theme:
     - search.suggest
     - content.code.copy
     - content.tabs.link
+    - toc.integrate
+    - navigation.sections   # top-level groups render as headers instead of collapsibles
+    - navigation.expanded   # expand all subsections by default
+    - navigation.indexes    # attach an index.md to its section, so the section title is clickable
+    - navigation.tracking
   palette:
     - scheme: default
       toggle: {icon: material/weather-night, name: Dark mode}
@@ -24,34 +29,22 @@ markdown_extensions:
       alternate_style: true
 nav:
   - Home: index.md
-  - Getting started:
-      - Quickstart: getting-started/quickstart.md
-      - Scope and Data Coverage: getting-started/scope.md
-      - Authentication: getting-started/authentication.md
-      - Base URLs: getting-started/base-urls.md
-  - Guides:
-      - Finding zones: guides/finding-zones.md
-      - Time filtering: guides/time-filtering.md
-      - Pagination: guides/pagination.md
-      - Policies and rules: guides/policies-and-rules.md
-      - Response envelope: guides/response-envelope.md
-      - Errors: guides/errors.md
+  - Usage guide: usage.md
   - Reference:
       - API reference: reference/api.md
-      - CDS Curbs spec: CURBS.md
-      - Database tables: CURBS_database.md
-      - Database views: CURBS_views.md
-  - Examples:
-      - curl: examples/curl.md
-      - Python: examples/python.md
-      - JavaScript: examples/javascript.md
-  - Operations:
-      - Deployment: operations/deployment.md
-      - Data refresh: operations/data-refresh.md
-  - FAQ: faq.md
-  - Changelog: changelog.md
-  - Support: support.md
+      - CDS Curbs spec: reference/cds.md
+  # - Examples:
+  #     - curl: examples/curl.md
+  #     - Python: examples/python.md
+  #     - JavaScript: examples/javascript.md
 
 plugins:
   - search
+  - macros
   - swagger-ui-tag
+
+extra:
+  base_url: https://cds-curb-api.boston.gov
+  generator: false
+
+copyright: Copyright &copy; 2026 City of Boston
