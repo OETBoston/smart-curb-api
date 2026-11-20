@@ -2,16 +2,17 @@ import json
 import os
 import uuid
 from functools import lru_cache
+from pathlib import Path as FilePath
 from typing import Annotated
 
 import pandas as pd
-
-# TODO: Use Cloud Secret Manager (https://cloud.google.com/secret-manager) instead of env vars
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Path, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi_versionizer import Versionizer, api_version
 from sqlalchemy import create_engine
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.engine import URL, Engine
@@ -75,9 +76,9 @@ TAGS_METADATA = [
 
 app: FastAPI = FastAPI(
     title="City of Boston Curbs API",
-    summary="This is the API for the City of Boston Curb data",
+    summary="",
     description=API_DESCRIPTION,
-    version="0.1",
+    version="1.0",
     contact={"name": "Office of Emerging Technology", "email": "oet@boston.gov"},
     openapi_tags=TAGS_METADATA,
 )
@@ -104,15 +105,9 @@ app.add_middleware(
 )
 
 
-@app.get("/", include_in_schema=False)
-async def redirect_to_docs():
-    """Redirect the base URL to the /docs documentation page."""
-    return RedirectResponse(url="/docs")
-
-
-# Example request: /curbs/zones?min_lng=-71.04695320129396&min_lat=42.339482118418005&max_lng=-71.05236053466798&max_lat=42.34163915108597
-# Example request: /curbs/zones?lng=-71.05052025698136&lat=42.34100193645163&radius=3500
-# Example request: /curbs/zones?include_geometry=false&time=1765498738000
+# Example request: /v1/curbs/zones?min_lng=-71.04695320129396&min_lat=42.339482118418005&max_lng=-71.05236053466798&max_lat=42.34163915108597
+# Example request: /v1/curbs/zones?lng=-71.05052025698136&lat=42.34100193645163&radius=3500
+# Example request: /v1/curbs/zones?include_geometry=false&time=1765498738000
 @app.get(
     "/curbs/zones",
     tags=["Zones"],
@@ -121,6 +116,7 @@ async def redirect_to_docs():
     response_model_exclude_unset=True,
     responses={400: {"model": ErrorResponse}},
 )
+@api_version(1)
 async def query_curb_zones(
     area: Annotated[
         uuid.UUID | None,
@@ -254,8 +250,8 @@ async def query_curb_zones(
     }
 
 
-# Example request: /curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb
-# Example request: /curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb?time=1765498738000
+# Example request: /v1/curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb
+# Example request: /v1/curbs/zones/a5378455-baae-57e4-a76a-6e17925c52bb?time=1765498738000
 @app.get(
     "/curbs/zones/{id}",
     tags=["Zones"],
@@ -263,6 +259,7 @@ async def query_curb_zones(
     response_model=ZoneResponse,
     response_model_exclude_unset=True,
 )
+@api_version(1)
 async def fetch_curb_zone(
     id: Annotated[uuid.UUID, Path(description="Curb zone ID.")],
     time: Annotated[
@@ -326,8 +323,8 @@ async def fetch_curb_zone(
     }
 
 
-# Example request: /curbs/policies
-# Example request: /curbs/policies?ids=0076db6b-7ff1-5aa8-98e0-b36548ace1ca,007b3f23-83b9-51ce-8983-83dc03ebee71
+# Example request: /v1/curbs/policies
+# Example request: /v1/curbs/policies?ids=0076db6b-7ff1-5aa8-98e0-b36548ace1ca,007b3f23-83b9-51ce-8983-83dc03ebee71
 @app.get(
     "/curbs/policies",
     tags=["Policies"],
@@ -335,6 +332,7 @@ async def fetch_curb_zone(
     response_model=PoliciesResponse,
     response_model_exclude_unset=True,
 )
+@api_version(1)
 async def query_curb_policies(
     ids: Annotated[
         str | None,
@@ -372,7 +370,7 @@ async def query_curb_policies(
     }
 
 
-# Example request: /curbs/policies/0076db6b-7ff1-5aa8-98e0-b36548ace1ca
+# Example request: /v1/curbs/policies/0076db6b-7ff1-5aa8-98e0-b36548ace1ca
 @app.get(
     "/curbs/policies/{id}",
     tags=["Policies"],
@@ -380,6 +378,7 @@ async def query_curb_policies(
     response_model=PolicyResponse,
     response_model_exclude_unset=True,
 )
+@api_version(1)
 async def fetch_curb_policy(id: Annotated[uuid.UUID, Path(description="Policy ID.")]):
     """Return a single curb policy by ID.
 
@@ -407,3 +406,30 @@ async def fetch_curb_policy(id: Annotated[uuid.UUID, Path(description="Policy ID
         **RESPONSE_DEFAULT_PARMS,
         "data": json.loads(df.to_json(orient="records", default_handler=str))[0],
     }
+
+
+# Serve every @api_version-tagged route under /v1. Versionizer removes all other routes from the
+# app when constructed, so the unversioned routes below must be registered after this call.
+Versionizer(
+    app=app,
+    prefix_format="/v{major}",
+    semantic_version_format="{major}",
+    sort_routes=True,
+).versionize()
+
+
+# The MkDocs site (built with `mkdocs build` into ./site) is served under /documentation
+# (not versioned). /docs is taken by FastAPI's Swagger UI. If the site isn't built, the API still runs.
+DOCS_SITE_DIR = FilePath(__file__).resolve().parent / "site"
+if DOCS_SITE_DIR.is_dir():
+    app.mount(
+        "/documentation",
+        StaticFiles(directory=DOCS_SITE_DIR, html=True),
+        name="documentation",
+    )
+
+
+@app.get("/", include_in_schema=False)
+async def redirect_to_docs():
+    """Redirect the base URL to the /documentation page."""
+    return RedirectResponse(url="/documentation")
