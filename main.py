@@ -8,11 +8,13 @@ from typing import Annotated
 import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Path, Query
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi_versionizer import Versionizer, api_version
+from pydantic import ValidationError
 from sqlalchemy import create_engine
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.engine import URL, Engine
@@ -23,6 +25,7 @@ from models import (
     PolicyResponse,
     ZoneResponse,
     ZonesResponse,
+    policy_ids_adapter,
 )
 
 load_dotenv()
@@ -258,6 +261,7 @@ async def query_curb_zones(
     summary="Get a curb zone",
     response_model=ZoneResponse,
     response_model_exclude_unset=True,
+    responses={404: {"description": "No curb zone exists with the given ID."}},
 )
 @api_version(1)
 async def fetch_curb_zone(
@@ -272,10 +276,7 @@ async def fetch_curb_zone(
         bool, Query(description="Accepted but currently ignored.")
     ] = False,
 ):
-    """Return a single curb zone by ID.
-
-    An unknown ID (or a zone not valid at `time`) currently produces a server error rather than a 404.
-    """
+    """Return a single curb zone by ID."""
 
     # TODO: show_historic??
 
@@ -317,6 +318,9 @@ async def fetch_curb_zone(
     with get_engine().connect() as conn:
         df = pd.read_sql(query, conn, params=parms)
 
+    if df.empty:
+        raise HTTPException(status_code=404, detail=f"Curb zone {id} not found")
+
     return {
         **RESPONSE_DEFAULT_PARMS,
         "data": json.loads(df.to_json(orient="records", default_handler=str))[0],
@@ -336,10 +340,25 @@ async def fetch_curb_zone(
 async def query_curb_policies(
     ids: Annotated[
         str | None,
-        Query(description="Comma-separated policy IDs. Omit to return all policies."),
+        Query(
+            description="Comma-separated policy IDs (UUIDs). Omit to return all policies."
+        ),
     ] = None,
 ):
     """Return all curb policies, or only those listed in `ids`."""
+    policy_ids = []
+    if ids:
+        try:
+            policy_ids = policy_ids_adapter.validate_python(ids)
+        except ValidationError as exc:
+            # Same 422 shape FastAPI produces for query params, e.g. loc = ["query", "ids", 1].
+            raise RequestValidationError(
+                [
+                    {**err, "loc": ("query", "ids", *err["loc"])}
+                    for err in exc.errors(include_url=False, include_context=False)
+                ]
+            ) from exc
+
     query = f"""
         SELECT
             curb_policy_id,
@@ -355,9 +374,9 @@ async def query_curb_policies(
         WHERE 1=1"""
     parms = {}
 
-    if ids:
+    if policy_ids:
         query += " AND curb_policy_id IN %(ids)s"
-        parms["ids"] = tuple(ids.split(","))
+        parms["ids"] = tuple(policy_ids)
 
     with get_engine().connect() as conn:
         df = pd.read_sql(query, conn, params=parms)
@@ -377,13 +396,11 @@ async def query_curb_policies(
     summary="Get a curb policy",
     response_model=PolicyResponse,
     response_model_exclude_unset=True,
+    responses={404: {"description": "No curb policy exists with the given ID."}},
 )
 @api_version(1)
 async def fetch_curb_policy(id: Annotated[uuid.UUID, Path(description="Policy ID.")]):
-    """Return a single curb policy by ID.
-
-    An unknown ID currently produces a server error rather than a 404.
-    """
+    """Return a single curb policy by ID."""
     query = f"""
         SELECT
             curb_policy_id,
@@ -401,6 +418,9 @@ async def fetch_curb_policy(id: Annotated[uuid.UUID, Path(description="Policy ID
 
     with get_engine().connect() as conn:
         df = pd.read_sql(query, conn, params=parms)
+
+    if df.empty:
+        raise HTTPException(status_code=404, detail=f"Curb policy {id} not found")
 
     return {
         **RESPONSE_DEFAULT_PARMS,

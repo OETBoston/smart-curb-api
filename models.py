@@ -5,9 +5,22 @@ fields are optional and loosely typed because the views return NULLs for
 attributes the City does not publish.
 """
 
-from typing import Any
+import uuid
+from typing import Annotated, Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, TypeAdapter
+
+
+def _split_commas(v: Any) -> Any:
+    """Turn "a,b" into ["a", "b"], dropping blanks. Non-strings pass through for pydantic to reject."""
+    if isinstance(v, str):
+        return [p.strip() for p in v.split(",") if p.strip()]
+    return v
+
+
+# Comma-separated query value validated as a list of UUIDs.
+PolicyIds = Annotated[list[uuid.UUID], BeforeValidator(_split_commas)]
+policy_ids_adapter = TypeAdapter(PolicyIds)
 
 
 class Envelope(BaseModel):

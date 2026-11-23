@@ -104,7 +104,7 @@ These terms apply to the Curbs dataset and API. The [Boston.gov Terms of Use and
 
 **Use of City names and marks.** Third-party products and services that use Curbs data must not imply City sponsorship or endorsement. They must not use the City seal, and they must not present non-City services as City services.
 
-**Heavy use.** Heavy API use can slow service for others. If your application will make sustained or high-volume requests, please notify digital@boston.gov.
+**Heavy use.** Heavy API use can slow service for others. If your application will make sustained or high-volume requests, please notify <digital@boston.gov>.
 
 **Contributed data.** Corrections and updates submitted through the [feedback channel] are released under the same PDDL license.
 

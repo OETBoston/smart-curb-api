@@ -19,7 +19,7 @@ Use `GET /v1/curbs/zones/{id}` to retrieve a single curb zone by ID.
 
 A [Curb Policy](reference/cds.md#policy) A Policy is a rule that allows or prohibits a particular set of users from using a particular curb at a particular time or times
 
-Each zone lists `curb_policy_ids`. Resolve them with `GET /v1/curbs/policies?ids=a,b` or `GET /v1/curbs/policies/{id}`. A policy carries `rules`, `time_spans`, `rates`, a `priority` and a `policy_color`.
+Each zone lists `curb_policy_ids`. Resolve them with `GET /v1/curbs/policies?ids=a,b` (each ID must be a UUID, otherwise the API returns a 422) or `GET /v1/curbs/policies/{id}`. A policy carries `rules`, `time_spans`, `rates`, a `priority` and a `policy_color`.
 
 See the [CDS Curbs spec](reference/cds.md) for the meaning of rule fields.
 
@@ -51,8 +51,9 @@ Errors use FastAPI's `{"detail": ...}` shape.
 
 | Status | When |
 | ------ | ---- |
-| 400 | Incomplete bounding box or radius parameters |
+| 400 | Bad Request. Incomplete bounding box or radius parameters |
+| 404 | Unknown zone or policy ID |
 | 422 | A parameter fails validation (e.g. malformed UUID) |
-| 500 | Unknown zone or policy ID (known issue; should be 404) |
+
 
 <!-- TODO: update once the 404 fix lands -->
