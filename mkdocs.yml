@@ -1,4 +1,3 @@
-site_dir: docs_site
 site_name: City of Boston Curbs API
 site_description: Documentation for the City of Boston Curbs API (CDS Curbs v1.1)
 site_url: https://cds-curb-api.boston.gov
